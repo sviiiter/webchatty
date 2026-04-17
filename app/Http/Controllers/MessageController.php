@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Chat\MessageValidator;
 use App\Chat\ValidationException;
+use App\Events\MessageSent;
 use App\Models\Message;
 use App\Models\Room;
 use Illuminate\Http\JsonResponse;
@@ -42,6 +43,10 @@ class MessageController extends Controller
             'content' => trim($request->input('content')),
         ]);
 
-        return response()->json($message->load('user:id,name'), 201);
+        $message->load('user:id,name');
+
+        broadcast(new MessageSent($message))->toOthers();
+
+        return response()->json($message, 201);
     }
 }
