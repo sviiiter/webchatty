@@ -21,21 +21,21 @@
           v-if="mode === 'register'"
           v-model="form.name"
           placeholder="Name"
-          class="input"
+          class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors w-full"
           required
         />
         <input
           v-model="form.email"
           type="email"
           placeholder="Email"
-          class="input"
+          class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors w-full"
           required
         />
         <input
           v-model="form.password"
           type="password"
           placeholder="Password"
-          class="input"
+          class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors w-full"
           required
         />
         <p v-if="error" class="text-red-400 text-sm">{{ error }}</p>
@@ -73,10 +73,3 @@ async function submit() {
   }
 }
 </script>
-
-<style scoped>
-.input {
-  @apply bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm text-gray-100
-         placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors w-full;
-}
-</style>
