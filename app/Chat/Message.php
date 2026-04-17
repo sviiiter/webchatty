@@ -7,6 +7,9 @@ namespace App\Chat;
 class Message
 {
     public private(set) string $content {
+        get {
+            return $this->content;
+        }
         set(string $value) {
             $trimmed = trim($value);
 
@@ -30,7 +33,6 @@ class Message
         $this->content = $content;
     }
 
-    public function getContent(): string { return $this->content; }
     public function getUserId(): int     { return $this->userId; }
     public function getRoomId(): int     { return $this->roomId; }
 

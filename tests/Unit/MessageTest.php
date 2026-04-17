@@ -21,7 +21,7 @@ class MessageTest extends TestCase
     {
         $message = new Message(content: '  Hello!  ', userId: 1, roomId: 42);
 
-        $this->assertSame('Hello!', $message->getContent());
+        $this->assertSame('Hello!', $message->content);
     }
 
     public function test_get_user_id_returns_correct_value(): void
@@ -87,6 +87,6 @@ class MessageTest extends TestCase
     {
         $message = new Message(content: str_repeat('a', 2000), userId: 1, roomId: 1);
 
-        $this->assertSame(2000, strlen($message->getContent()));
+        $this->assertSame(2000, strlen($message->content));
     }
 }
