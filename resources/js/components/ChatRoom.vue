@@ -25,13 +25,8 @@ async function load() {
 }
 
 async function sendMessage(content) {
-  await axios.post(`rooms/${props.room.id}/messages`, { content });
-  messages.value.push({
-    id: Date.now(),
-    content,
-    user: { name: 'You' },
-    created_at: new Date().toISOString(),
-  });
+  const { data } = await axios.post(`rooms/${props.room.id}/messages`, { content });
+  messages.value.push(data);
 }
 
 function subscribe() {
