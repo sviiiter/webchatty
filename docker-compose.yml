@@ -13,7 +13,7 @@ services:
       REVERB_APP_ID: "844196"
       REVERB_APP_KEY: "rxlnysdfemaatrejm4z9"
       REVERB_APP_SECRET: "m4hccbl2khpcqpjkckjd"
-      REVERB_HOST: "localhost"
+      REVERB_HOST: "reverb"
       REVERB_PORT: "6001"
       REVERB_SCHEME: "http"
 
