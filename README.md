@@ -11,7 +11,7 @@ Real-time chat with rooms, built on Laravel 13 + Vue 3. Messages show up instant
 
 ## Stack
 
-**Backend** — Laravel 13, Sanctum (auth), Reverb (WebSocket server)  
+**Backend** — PHP 8.4, Laravel 13, Sanctum (auth), Reverb (WebSocket server)  
 **Frontend** — Vue 3, Tailwind CSS 4, Vite, Laravel Echo  
 **DB** — SQLite
 
@@ -31,5 +31,5 @@ This starts four containers: `nginx` (port 80), the PHP app, the Reverb WebSocke
 ## Tests
 
 ```bash
-docker-compose exec app composer run test
+docker compose exec app composer run test
 ```
