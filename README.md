@@ -1,58 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# WebChat
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Real-time chat with rooms, built on Laravel 13 + Vue 3. Messages show up instantly for everyone in the room — no refreshing needed.
 
-## About Laravel
+## What it does
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Sign up, log in, log out
+- Create chat rooms and jump between them
+- Send messages that appear live for all connected users (WebSockets via Reverb)
+- Loads the last 50 messages when you open a room
+- Runs in Docker if you want
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Backend** — Laravel 13, Sanctum (auth), Reverb (WebSocket server)  
+**Frontend** — Vue 3, Tailwind CSS 4, Vite, Laravel Echo  
+**DB** — SQLite out of the box, MySQL/Postgres also work
 
-## Learning Laravel
+## Getting started
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+You'll need PHP 8.3+, Composer, and Node 20+.
 
 ```bash
-composer require laravel/boost --dev
+git clone <repo-url> webchat && cd webchat
+composer install && npm install
 
-php artisan boost:install
+cp .env.example .env
+php artisan key:generate
+
+# flip this in your .env to turn on real-time messaging
+# BROADCAST_CONNECTION=reverb
+
+touch database/database.sqlite
+php artisan migrate
+
+composer run dev
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Then open http://localhost:8000.
 
-## Contributing
+`composer run dev` spins up Laravel, the queue worker, Pail (log viewer), and Vite all at once.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Fresh clone? One command does everything:**
 
-## Code of Conduct
+```bash
+composer run setup
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Installs deps, copies `.env`, generates a key, migrates, builds assets.
 
-## Security Vulnerabilities
+## Docker
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+docker-compose up -d
+```
 
-## License
+Starts nginx (port 80), the PHP app, the Reverb WebSocket server (port 6001), and a queue worker. Hit http://localhost when it's up.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Environment variables worth knowing
+
+| Variable | Default | What it does |
+|----------|---------|-------------|
+| `BROADCAST_CONNECTION` | `log` | Change to `reverb` for live messaging |
+| `REVERB_APP_ID` | — | Reverb app ID |
+| `REVERB_APP_KEY` | — | Reverb app key |
+| `REVERB_APP_SECRET` | — | Reverb app secret |
+| `REVERB_HOST` | `localhost` | Where Reverb is running |
+| `REVERB_PORT` | `8080` | Reverb port |
+| `DB_CONNECTION` | `sqlite` | Database driver |
+
+## How it's structured
+
+```
+resources/js/
+├── app.js               # entry point, wires up Axios + auth token
+├── echo.js              # WebSocket setup
+└── components/
+    ├── App.vue           # root, handles auth state
+    ├── LoginForm.vue     # login / register
+    ├── RoomList.vue      # room sidebar + create form
+    ├── ChatRoom.vue      # the main chat view, listens on WS channel
+    ├── MessageList.vue   # auto-scrolling messages
+    └── MessageInput.vue  # the input box
+
+app/
+├── Models/              # User, Room, Message
+├── Http/Controllers/    # AuthController, RoomController, MessageController
+├── Events/MessageSent.php  # fires on new message → Reverb picks it up
+└── Chat/                # MessageValidator, RoomNameFormatter
+```
+
+**Auth:** login → Sanctum token → saved in `localStorage` → attached to every request.
+
+**Messaging:** send message → saved to DB → `MessageSent` event fires → Reverb pushes it to the private `chat.{roomId}` channel → everyone in that room sees it instantly.
+
+## API
+
+| Method | Endpoint | Needs auth? | Description |
+|--------|----------|-------------|-------------|
+| POST | `/api/auth/register` | no | create account |
+| POST | `/api/auth/login` | no | get a token |
+| POST | `/api/auth/logout` | yes | revoke token |
+| GET | `/api/rooms` | no | list rooms |
+| POST | `/api/rooms` | yes | create a room |
+| GET | `/api/rooms/{room}/messages` | yes | last 50 messages |
+| POST | `/api/rooms/{room}/messages` | yes | send a message |
+
+## Tests
+
+```bash
+composer run test
+```

@@ -25,14 +25,17 @@ async function load() {
 }
 
 async function sendMessage(content) {
-  const { data } = await axios.post(`rooms/${props.room.id}/messages`, { content });
-  messages.value.push(data);
+  console.log('[sendMessage] sending:', content);
+  await axios.post(`rooms/${props.room.id}/messages`, { content });
+  console.log('[sendMessage] done');
 }
 
 function subscribe() {
   echo = makeEcho(props.token);
+  console.log('[subscribe] called, room:', props.room.id);
   echo.private(`chat.${props.room.id}`)
     .listen('.message.sent', ({ message }) => {
+      console.log('[broadcast received] id:', message.id, 'messages count before push:', messages.value.length);
       messages.value.push(message);
     });
 }
