@@ -1,0 +1,79 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property App\\Models\\Message\:\:\$content\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Events/MessageSent.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Message\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Events/MessageSent.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Message\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Events/MessageSent.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Message\:\:\$room_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Events/MessageSent.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Message\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Events/MessageSent.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\User\:\:where\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/AuthController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Room\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/MessageController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Message\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/MessageController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Room\:\:create\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/RoomController.php
+
+		-
+			message: '#^Call to an undefined static method App\\Models\\Room\:\:orderBy\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 1
+			path: app/Http/Controllers/RoomController.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Room\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Room.php
+
+		-
+			message: '#^Access to an undefined property App\\Models\\Room\:\:\$slug\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Room.php
