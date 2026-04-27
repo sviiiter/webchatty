@@ -37,9 +37,12 @@ class MessageController extends Controller
             return response()->json(['errors' => $e->errors()], 422);
         }
 
+        $user = $request->user();
+        assert($user !== null);
+
         $message = Message::create([
             'room_id' => $room->id,
-            'user_id' => $request->user()->id,
+            'user_id' => $user->id,
             'content' => trim($request->input('content')),
         ]);
 

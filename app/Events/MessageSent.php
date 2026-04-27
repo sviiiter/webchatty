@@ -40,10 +40,10 @@ class MessageSent implements ShouldBroadcastNow
                 'content'    => $this->message->content,
                 'room_id'    => $this->message->room_id,
                 'user'       => [
-                    'id'   => $this->message->user->id,
-                    'name' => $this->message->user->name,
+                    'id'   => $this->message->user?->id,
+                    'name' => $this->message->user?->name,
                 ],
-                'created_at' => $this->message->created_at->toISOString(),
+                'created_at' => $this->message->created_at?->toISOString(),
             ],
         ];
     }
