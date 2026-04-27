@@ -36,6 +36,7 @@ class Message
     public function getUserId(): int     { return $this->userId; }
     public function getRoomId(): int     { return $this->roomId; }
 
+    /** @return array<string, int|string> */
     public function toArray(): array
     {
         return [

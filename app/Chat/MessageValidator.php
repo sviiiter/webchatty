@@ -6,8 +6,10 @@ namespace App\Chat;
 
 class MessageValidator
 {
+    /** @var array<string, string> */
     private array $fieldErrors = [];
 
+    /** @param array<string, mixed> $payload */
     public function validate(array $payload): void
     {
         $this->fieldErrors = [];
@@ -40,6 +42,7 @@ class MessageValidator
         }
     }
 
+    /** @return array<string, string> */
     public function errors(): array
     {
         return $this->fieldErrors;

@@ -31,6 +31,7 @@ class MessageSent implements ShouldBroadcastNow
         return 'message.sent';
     }
 
+    /** @return array<string, mixed> */
     public function broadcastWith(): array
     {
         return [
